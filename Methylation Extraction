@@ -1,0 +1,3 @@
+## 6 - METHYLATION_EXTRACTION
+echo"----Now methylation extraction process----" 
+./$methylation_extractor --bedGraph --ignore_r2 --cytosine_report --genome_folder --output_dir methylation_extract/ $gene_ref alignement_result/*.bam
