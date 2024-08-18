@@ -1,0 +1,2 @@
+## 3 - Reference genome indexing  
+for x in $gene_ref; do ./$genome_preparation "$x";done
