@@ -1,0 +1,4 @@
+## 1 - RUNNING FASTQC
+echo "---Running FASTQC---"
+for x in $user; do fastqc "$x" -o $fastqc_output;done
+echo "----Quality control is done!----"
