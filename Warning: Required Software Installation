@@ -1,0 +1,16 @@
+Before running this script, ensure that the following software is installed and accessible from your system's PATH:
+
+    Bismark - Required for genome alignment, methylation extraction, and report generation.
+    FASTQC - For quality control of your sequence data.
+    TrimGalore - For trimming adapter sequences and low-quality bases.
+    MultiQC - For summarizing the results of FASTQC and other tools.
+    A Reference Genome - Properly indexed for Bismark, necessary for alignment.
+
+Failure to install these programs or provide the correct paths during script execution will result in errors and unsuccessful analysis.
+
+You can install Bismark and other tools by following the installation instructions provided in their official documentation:
+
+    Bismark: Bismark GitHub
+    FASTQC: FASTQC Homepage
+    TrimGalore: TrimGalore GitHub
+    MultiQC: MultiQC Documentation
