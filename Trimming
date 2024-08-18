@@ -1,0 +1,4 @@
+## 2 - TrimGalore
+echo "---Start trimming---" 
+for x in $user; do ./$trimgalore_dir "$x" --output_dir $fastqc_output/trimming_report --$phred --length $length --rrbs;done
+echo "----Trimming is done!----"
