@@ -1,0 +1,83 @@
+####Introduction and Welcome:
+
+echo "----Welcome to this bash script for methylation analysis----"
+
+This command displays a welcome message, informing the user that they are about to run a script for methylation analysis.
+
+####Requesting Paths for Files and Programs:
+
+echo "--Please specify the right path for each program--"
+echo "- Enter the path for the files gonna get analysed -"
+read user
+
+The script prompts the user to specify the path to the files that will be analyzed, using the read command to store the input in the variable user.
+
+####Creating an Output Folder for the FASTQC Report:
+
+echo "- Creating folder output for FASTQC report, please provide a output folder "
+read fastqc_output
+mkdir -p $fastqc_output
+
+The script asks the user to provide an output folder for FASTQC reports, and then creates this folder using mkdir -p, ensuring the folder is created if it doesn't already exist.
+
+####TrimGalore Configuration:
+
+echo "Please provide the right path for trimgalore program"
+read trimgalore_dir 
+echo "- For trimming part enter the parameters you wanna perform"
+echo "Choose the phred score [phred33/phred64]"
+read phred
+echo "Choose the right length you wanna drop"
+read length 
+echo "Do you wanna trim 5' end for both forward and reverse, please choose [y/n]"
+read trim_5_end
+
+The script asks the user to provide the path to the TrimGalore program and specify trimming parameters (Phred score, minimum sequence length, and whether to trim the 5' end of both forward and reverse reads).
+
+####Genome Indexing:
+
+echo "Please provide the reference genome path folder"
+read gene_ref
+echo "Please provide the path for the bismark genome preparation script"
+read genome_preparation
+
+The script prompts the user to enter the path to the reference genome folder and the path to the Bismark genome preparation script, which are needed for indexing the genome for alignment.
+
+Alignment Setup:
+
+echo "Please enter the path for bismark program"
+read bismark 
+echo "Please indicate if it's PE or SE, please choose [pe/se]"
+read alignment_parameter
+
+The script asks for the path to the Bismark program and whether the alignment will be performed with paired-end (PE) or single-end (SE) reads.
+
+if [ "align_parameter" = "pe"]; then
+     echo "Please enter the path for the two files to be aligned"
+     read _R1
+     read _R2
+     
+elif [ "align_parameter" = "se" ]; then
+     echo "Please enter the path for the file to be aligned"
+     read _S
+fi
+
+Based on whether the user selects PE or SE, the script requests the appropriate file paths for alignment.
+
+####Methylation Extraction:
+
+echo "Please provide the path for bismark methylation extraction script"
+read methylation_extractor
+
+the script asks the user to provide the path to the Bismark methylation extraction script, which is used to extract methylation data from the aligned reads
+
+####Methylation Report Generation:
+
+echo "Please provide the path for bismark methylation report"
+read bismark_2_report
+
+The script requests the path for the Bismark methylation report script, which will be used to generate reports summarizing the methylation analysis
+
+
+
+
