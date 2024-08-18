@@ -1,0 +1,3 @@
+## 7 - METHYLATION_EXTRACTION_REPORT_VISUALIZATION 
+echo"----Now performing methylation extraction report----" 
+./$bismark_report --alignement_report alignment_result/*.txt --mbias_report methylation_extract/*.M-bias.txt --nucleotide_report methylation_extract/*.cov.gz --output bismark_report
