@@ -1,0 +1,96 @@
+#|/bin/bash
+
+echo "----Welcome to this bash script for methylation analysis----"
+echo "--Please specify the right path for each program--"
+echo "- Enter the path for the files gonna get analysed -"
+read user 
+echo "- Creating folder output for FASTQC report, please provide a output folder "
+read fastqc_output
+mkdir -p $fastqc_output 
+
+## TrimGalore
+echo "Please provide the right path for trimgalore program"
+read trimgalore_dir 
+echo "- For triming part enter the parameters you wanna perform"
+echo "Choose the phred score [phred33/phred64]"
+read phred
+echo "Choose the right length you wanna drop"
+read length 
+echo "Do you wanna trim 5' end for both forward and reverse, please choose [y/n]"
+read trim_5_end
+
+
+## genome indexation
+echo "Please provide the reference genome path folder"
+read gene_ref
+echo "Please provide the path for the bismark genome preparation script"
+read genome_preparation
+
+## Alignement
+echo "Please enter the path for bismark program"
+read bismark 
+echo "Please indiquate if it's PE or SE, please choose [pe/se]"
+read alignment_parameter
+
+
+if [ "align_parameter" = "pe"]; then
+        echo "Please enter the path for the two files to be aligned"
+        read _R1
+        read _R2
+        
+elif [ "align_parameter" = "se" ]; then
+        echo "Please enter the path for the file to be aligned"
+        read _S
+
+fi
+
+## Methylation extractor
+echo "Please provide the path for bismark methylation extraction script"
+read methylation_extractor
+
+## Methylation report
+echo "Please provide the path for bismark methylation report"
+read bismark_2_report
+
+
+
+
+## 1 - RUNNING FASTQC
+echo "---Running FASTQC---"
+for x in $user; do fastqc "$x" -o $fastqc_output;done
+echo "----Quality control is done!----"
+
+
+## 2 - TrimGalore
+echo "---Start trimming---" 
+for x in $user; do ./$trimgalore_dir "$x" --output_dir $fastqc_output/trimming_report --$phred --length $length --rrbs;done
+echo "----Trimming is done!----"
+
+
+## 3 - Reference genome indexing  
+for x in $gene_ref; do ./$genome_preparation "$x";done
+
+
+## 4 - Alignment
+if [ "align_parameter" = "pe" ]; then 
+	./$bismark --genome $gene_ref -1 $_R1 -2 $_R2 --output_dir alignment_result/ -p 2
+else 
+	./$bismark --genome $gene_ref -1 $_S --output_dir alignment_result/ -p 2
+fi
+
+
+## 5 - PERFORMING ALIGNMENT QUALITY CONTROL 
+echo"performing alignment quality control using MultiQC"
+for x in alignment_result/; do multiqc --outdir alignment_result/alignment_quality_results;done 
+
+	
+## 6 - METHYLATION_EXTRACTION
+echo"----Now methylation extraction process----" 
+./$methylation_extractor --bedGraph --ignore_r2 --cytosine_report --genome_folder --output_dir methylation_extract/ $gene_ref alignement_result/*.bam
+
+
+## 7 - METHYLATION_EXTRACTION_REPORT_VISUALIZATION 
+echo"----Now performing methylation extraction report----" 
+./$bismark_report --alignement_report alignment_result/*.txt --mbias_report methylation_extract/*.M-bias.txt --nucleotide_report methylation_extract/*.cov.gz --output bismark_report
+
+
