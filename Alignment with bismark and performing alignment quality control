@@ -1,0 +1,11 @@
+## 4 - Alignment
+if [ "align_parameter" = "pe" ]; then 
+	./$bismark --genome $gene_ref -1 $_R1 -2 $_R2 --output_dir alignment_result/ -p 2
+else 
+	./$bismark --genome $gene_ref -1 $_S --output_dir alignment_result/ -p 2
+fi
+
+
+## 5 - PERFORMING ALIGNMENT QUALITY CONTROL 
+echo"performing alignment quality control using MultiQC"
+for x in alignment_result/; do multiqc --outdir alignment_result/alignment_quality_results;done 
